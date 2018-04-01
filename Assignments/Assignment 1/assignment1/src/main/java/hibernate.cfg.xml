@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory name="sessionFactory">
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+        <property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
+        <property name="hibernate.connection.password">password</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/assignment1</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+        <property name="hibernate.search.autoregister_listeners">false</property>
+        <property name="hibernate.validator.apply_to_ddl">false</property>
+        <property name="hibernate.connection.autocommit">false</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.jdbc.use_streams_for_binary">false</property>
+        <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+        
+        <mapping class="com.utcn.se.vladrusu.model.Account" />
+        <mapping class="com.utcn.se.vladrusu.model.ClientAccount" />
+        <mapping class="com.utcn.se.vladrusu.model.ClientBankAccount" />
+        <mapping class="com.utcn.se.vladrusu.model.EmployeeAccount" />
+        <mapping class="com.utcn.se.vladrusu.model.ActivityLog" />
+        <mapping class="com.utcn.se.vladrusu.model.UtilityBill" />
+    </session-factory>
+</hibernate-configuration>
