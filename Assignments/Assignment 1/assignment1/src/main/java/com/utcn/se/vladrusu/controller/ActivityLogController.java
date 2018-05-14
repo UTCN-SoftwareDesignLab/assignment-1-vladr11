@@ -31,6 +31,7 @@ public class ActivityLogController {
 		if (!administratorService.hasAdminPermission(username)) {
 			return new ModelAndView("redirect:http://localhost:8080/assignment1/login/");
 		}
+		
 		ModelAndView model =  new ModelAndView("activity_log", "employee_id", new Integer(employee_id));
 		return model;
 	}

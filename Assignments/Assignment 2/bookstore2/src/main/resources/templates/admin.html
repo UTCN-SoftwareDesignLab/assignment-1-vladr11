@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <!--===============================================================================================-->
+
+    <style>
+        input[type=text], select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body onload="loadData()">
+<div style="border-radius: 5px; background-color: #f2f2f2; padding: 20px;" id="search">
+    <form>
+        Title:
+        <input type="text" name="title" value="" id="btitle">
+        <br>
+        Author:
+        <input type="text" name="author" value="" id="bauthor">
+        <br>
+        Genre:
+        <input type="text" name="genre" value="" id="bgenre">
+        <br>
+        <input type="submit" value="Search">
+    </form>
+</div>
+<div class="container-table100">
+    <div class="wrap-table100">
+        <div class="table100 ver1 m-b-110">
+            <div class="table100-head">
+                <table>
+                    <thead>
+                    <tr class="row100 head">
+                        <th class="cell100 column1">Title</th>
+                        <th class="cell100 column2">Author</th>
+                        <th class="cell100 column3">Genre</th>
+                        <th class="cell100 column4">Quantity</th>
+                        <th class="cell100 column5">Price</th>
+                        <th class="cell100 column6">Delete</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div class="table100-body js-pscroll">
+                <table>
+                    <tbody class="result">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="border-radius: 5px; background-color: #f2f2f2; padding: 20px;" id="add">
+    <form>
+        Title:
+        <input type="text" name="title" value="" id="add_title">
+        <br>
+        Author:
+        <input type="text" name="author" value="" id="add_author">
+        <br>
+        Genre:
+        <input type="text" name="genre" value="" id="add_genre">
+        <br>
+        Quantity:
+        <input type="number" name="quantity" value="" id="add_quantity" step="0.01">
+        <br>
+        Price:
+        <input type="number" name="price" value="" id="add_price">
+        <br>
+        <input type="submit" value="Add">
+    </form>
+</div>
+
+<!-- Users -->
+
+<div class="container-table100">
+    <div class="wrap-table100">
+        <div class="table100 ver1 m-b-110">
+            <div class="table100-head">
+                <table>
+                    <thead>
+                    <tr class="row100 head">
+                        <th class="cell100 column1">Username</th>
+                        <th class="cell100 column2">Full name</th>
+                        <th class="cell100 column3">Email</th>
+                        <th class="cell100 column4">Role</th>
+                        <th class="cell100 column5">Delete</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div class="table100-body js-pscroll">
+                <table>
+                    <tbody class="users">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="border-radius: 5px; background-color: #f2f2f2; padding: 20px;" id="add_user">
+    <form>
+        Username:
+        <input type="text" name="username" value="" id="username">
+        <br>
+        Password:
+        <input type="text" name="password" value="" id="password">
+        <br>
+        Fullname:
+        <input type="text" name="fullname" value="" id="fullname">
+        <br>
+        Email:
+        <input type="text" name="email" value="" id="email">
+        <br>
+        <input type="submit" value="Add">
+    </form>
+</div>
+
+<button onclick="getPDF();">PDF report</button>
+<button onclick="getCSV();">CSV report</button>
+
+<!--===============================================================================================-->
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/bootstrap/js/popper.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script>
+    $('.js-pscroll').each(function(){
+        var ps = new PerfectScrollbar(this);
+
+        $(window).on('resize', function(){
+            ps.update();
+        })
+    });
+
+
+</script>
+<!--===============================================================================================-->
+<script src="js/main.js"></script>
+
+<script>
+
+    function loadData() {
+        loadBooks()
+        loadUsers()
+    }
+
+    $("#search").submit(function (e) {
+        loadBooksWithQuery();
+        return false;
+    });
+
+    $("#add").submit(function (e) {
+        var title = $("#add_title").val()
+        var author = $("#add_author").val()
+        var genre = $("#add_genre").val()
+        var quantity = $("#add_quantity").val()
+        var price = $("#add_price").val()
+
+        $.ajax({
+            type: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            url: "/books",
+            data: JSON.stringify({
+                "title": title,
+                "author": parseInt(author),
+                "genre": parseInt(genre),
+                "quantity": parseInt(quantity),
+                "price": parseFloat(price)
+            }),
+            success: function (data) {
+                var book = data;
+                var table_row = '<tr class="row100 body">' +
+                    '<tr class="row100 body">' +
+                    '<td class="cell100 column1">' + book.title + '</td>' +
+                    '<td class="cell100 column2">' + book.author.name + '</td>' +
+                    '<td class="cell100 column3">' + book.genre.name + '</td>' +
+                    '<td class="cell100 column4">' + book.price + '</td>' +
+                    '<td class="cell100 column5">' + book.quantity + '</td>' +
+                    '<td class="cell100 column6"><button onclick="deleteBook(' + book.id + ')">Delete</button></td>' +
+                    '</tr>';
+                $(".result").append(table_row)
+            }
+        });
+        return false;
+    });
+
+    $("#add_user").submit(function (e) {
+        var username = $("#username").val()
+        var password = $("#password").val()
+        var fullname = $("#fullname").val()
+        var email = $("#email").val()
+
+        $.ajax({
+            type: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            url: "/users",
+            data: JSON.stringify({
+                "username": username,
+                "password": password,
+                "fullname": fullname,
+                "email": email
+            }),
+            success: function (data) {
+                var user = data;
+                var table_row = '<tr class="row100 body">' +
+                    '<tr class="row100 body">' +
+                    '<td class="cell100 column1">' + user.username+ '</td>' +
+                    '<td class="cell100 column2">' + user.fullname + '</td>' +
+                    '<td class="cell100 column3">' + user.email + '</td>' +
+                    '<td class="cell100 column4">' + user.role + '</td>' +
+                    '<td class="cell100 column5">' + '<button onclick="deleteUser(' + user.id +')">Delete</button>' + '</td>' +
+                    '</tr>';
+                $(".users").append(table_row)
+            }
+        });
+
+        return false;
+    })
+
+    function loadBooks() {
+        $.ajax({
+            type: "GET",
+            headers: {
+                "Accept": "application/json"
+            },
+            url: "/books",
+            success: function (data) {
+                renderBooks(data)
+            }
+        });
+    }
+
+    function loadUsers() {
+        $.ajax({
+            type: "GET",
+            headers: {
+                "Accept": "application/json"
+            },
+            url: "/users",
+            success: function (data) {
+                renderUsers(data);
+            }
+        })
+    }
+
+    function loadBooksWithQuery() {
+        var title = $("#btitle").val()
+        var author = $("#bauthor").val()
+        var genre = $("#bgenre").val()
+
+        var queryString = "?";
+        if (title.length > 0) {
+            queryString += "title=" + title
+        }
+        if (author.length > 0) {
+            queryString += "author=" + author
+        }
+
+        if (genre.length > 0) {
+            queryString += "genre=" + genre
+        }
+
+        $.ajax({
+            type: "GET",
+            headers: {
+                "Accept": "application/json"
+            },
+            url: "/books" + queryString,
+            success: function (data) {
+                renderBooks(data)
+            }
+        })
+    }
+
+    function renderBooks(data) {
+        var html = "";
+        var books = data.books;
+        var count = books.length;
+
+        for (var i = 0; i < count; i++) {
+            var book = books[i];
+            var table_row = '<tr class="row100 body">' +
+                '<tr class="row100 body">' +
+                '<td class="cell100 column1">' + book.title + '</td>' +
+                '<td class="cell100 column2">' + book.author.name + '</td>' +
+                '<td class="cell100 column3">' + book.genre.name + '</td>' +
+                '<td class="cell100 column4">' + book.price + '</td>' +
+                '<td class="cell100 column5">' + book.quantity + '</td>' +
+                '<td class="cell100 column6"><button onclick="deleteBook(' + book.id + ')">Delete</button></td>' +
+                '</tr>';
+            html += table_row;
+        }
+
+        $(".result").html(html)
+    }
+
+    function renderUsers(data) {
+        var html = "";
+        var users = data.users;
+        var count = users.length;
+
+        for (var i = 0; i < count; i++) {
+            var user = users[i];
+            var table_row = '<tr class="row100 body">' +
+                '<tr class="row100 body">' +
+                '<td class="cell100 column1">' + user.username + '</td>' +
+                '<td class="cell100 column2">' + user.fullname + '</td>' +
+                '<td class="cell100 column3">' + user.email + '</td>' +
+                '<td class="cell100 column4">' + user.role + '</td>' +
+                '<td class="cell100 column5">' + '<button onclick="deleteUser(' + user.id +')">Delete</button>' + '</td>' +
+                '</tr>';
+            html += table_row;
+        }
+
+        $(".users").html(html)
+    }
+
+    function deleteBook(bookId) {
+        $.ajax({
+            type: "DELETE",
+            url: "/books/" + bookId,
+            success: function () {
+                loadBooks()
+            }
+        })
+    }
+
+    function deleteUser(userId) {
+        $.ajax({
+            type: "DELETE",
+            url: "/users/" + userId,
+            success: function () {
+                loadUsers()
+            }
+        })
+    }
+
+    function getPDF() {
+        $.ajax({
+            type: "GET",
+            url: "/books/report/pdf"
+        })
+    }
+
+    function getCSV() {
+        $.ajax({
+            type: "GET",
+            url: "/books/report/csv",
+            success: function (data) {
+                console.log(data);
+            }
+        })
+    }
+</script>
+
+</body>
+</html>
