@@ -1,0 +1,57 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.1.RELEASE'
+        junitVersion = '4.12'
+        mySqlConnectorVersion = '5.1.36'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+jar {
+    baseName = 'bookstore'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenLocal()
+    maven { url "https://repo.spring.io/libs-release" }
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web:' + springBootVersion
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf:' + springBootVersion
+    compile("org.springframework.boot:spring-boot-devtools")
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa:' + springBootVersion
+    compile 'org.springframework.boot:spring-boot-starter-security:' + springBootVersion
+    compile 'mysql:mysql-connector-java:' + mySqlConnectorVersion
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
+    compile group: 'org.apache.commons', name: 'commons-io', version: '1.3.2'
+
+    compile 'org.springframework.boot:spring-boot-starter-websocket:'+ springBootVersion
+    compile("org.webjars:webjars-locator-core")
+    compile("org.webjars:sockjs-client:1.0.2")
+    compile("org.webjars:stomp-websocket:2.3.3")
+    compile("org.webjars:bootstrap:3.3.7")
+    compile("org.webjars:jquery:3.1.0")
+
+    testCompile 'junit:junit'
+    testCompile "org.mockito:mockito-core:1.+"
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile("org.springframework.security:spring-security-test")
+}

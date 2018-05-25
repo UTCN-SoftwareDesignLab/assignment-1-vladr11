@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <!--===============================================================================================-->
+
+    <style>
+        input[type=text], input[type=password], select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body onload="loadData()">
+
+<div class="container-table100">
+    <div class="wrap-table100">
+        <div class="table100 ver1 m-b-110">
+            <div class="table100-head">
+                <table>
+                    <thead>
+                    <tr class="row100 head">
+                        <th class="cell100 column1">ID</th>
+                        <th class="cell100 column2">Username</th>
+                        <th class="cell100 column3">Full name</th>
+                        <th class="cell100 column4">Role</th>
+                        <th class="cell100 column5">Delete</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div class="table100-body js-pscroll">
+                <table>
+                    <tbody class="users">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="border-radius: 5px; background-color: #f2f2f2; padding: 20px;" id="add_user">
+    <form>
+        ID:
+        <input type="text" name="id" value="" id="user_id">
+        <br>
+        Username:
+        <input type="text" name="username" value="" id="username">
+        <br>
+        Password:
+        <input type="password" name="password" value="" id="password">
+        <br>
+        Fullname:
+        <input type="text" name="fullname" value="" id="fullname">
+        <br>
+        Role:
+        <select name="role" id="role">
+            <option value="administrator">Administrator</option>
+            <option value="secretary">Secretary</option>
+            <option value="doctor">Doctor</option>
+        </select>
+        <br>
+        <input type="submit" value="Add">
+    </form>
+</div>
+
+<!--===============================================================================================-->
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/bootstrap/js/popper.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script>
+    $('.js-pscroll').each(function(){
+        var ps = new PerfectScrollbar(this);
+
+        $(window).on('resize', function(){
+            ps.update();
+        })
+    });
+
+
+</script>
+<!--===============================================================================================-->
+
+<script>
+    function loadData() {
+        loadUsers()
+    }
+
+    function loadUsers() {
+        $.ajax({
+            type: "GET",
+            headers: {
+                "Accept": "application/json"
+            },
+            url: "/users",
+            success: function (data) {
+                renderUsers(data);
+            }
+        })
+    }
+
+    function renderUsers(data) {
+        var html = "";
+        var users = data.users;
+        var count = users.length;
+
+        for (var i = 0; i < count; i++) {
+            var user = users[i];
+            var table_row = '<tr class="row100 body">' +
+                '<tr class="row100 body">' +
+                '<td class="cell100 column1">' + user.id + '</td>' +
+                '<td class="cell100 column2">' + user.username + '</td>' +
+                '<td class="cell100 column3">' + user.fullname + '</td>' +
+                '<td class="cell100 column4">' + user.role + '</td>' +
+                '<td class="cell100 column5">' + '<button onclick="deleteUser(' + user.id +')">Delete</button>' + '</td>' +
+                '</tr>';
+            html += table_row;
+        }
+
+        $(".users").html(html)
+    }
+
+    $("#add_user").submit(function (e) {
+        var userID = $("#user_id").val()
+        var username = $("#username").val()
+        var password = $("#password").val()
+        var fullname = $("#fullname").val()
+        var role = $("#role").val()
+
+        if (username.length == 0)
+            username = null;
+        if (password.length == 0)
+            password = null;
+        if (fullname.length == 0)
+            fullname = null;
+
+        var method = null
+        var url = null
+        if (userID.length == 0) {
+            method = "POST"
+            url = "/users"
+        } else {
+            method = "PUT"
+            url = "/users/" + userID
+        }
+
+        $.ajax({
+            type: method,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            url: url,
+            data: JSON.stringify({
+                "username": username,
+                "password": password,
+                "fullname": fullname,
+                "role": role
+            }),
+            success: function (data) {
+                loadUsers()
+            }
+        });
+
+        return false;
+    })
+
+    function deleteUser(userId) {
+        $.ajax({
+            type: "DELETE",
+            url: "/users/" + userId,
+            success: function () {
+                loadUsers()
+            }
+        })
+    }
+</script>
+
+</body>
+</html>

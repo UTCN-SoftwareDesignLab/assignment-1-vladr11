@@ -137,7 +137,6 @@ public class BookController {
         }
 
         Long quantity = (Long) jsonObject.get(Book.JSON_KEY_QUANTITY);
-        System.out.println("json: " + jsonString + "\nquantity: " + quantity);
         if (quantity != null) {
             Long bookQuantity = book.getQuantity();
             Long newQuantity = bookQuantity - quantity;
